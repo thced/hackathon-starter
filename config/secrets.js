@@ -1,8 +1,8 @@
 module.exports = {
-  db: 'mongodb://localhost:27017/test',
-
-  sessionSecret: "Your Session Secret goes here",
-
+  dbHost: [ "your-host:8091" ],
+  dbPassword: 'your-password',
+  dbBucket: 'your-bucket',
+  
   localAuth: true,
 
   mailgun: {

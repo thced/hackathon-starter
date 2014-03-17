@@ -8,7 +8,7 @@ describe('User Model', function() {
       email: 'test@gmail.com',
       password: 'password'
     });
-    user.save(function(err) {
+    User.create(user, function(err) {
       if (err) return done(err);
       done();
     })
@@ -19,14 +19,14 @@ describe('User Model', function() {
       email: 'test@gmail.com',
       password: 'password'
     });
-    user.save(function(err) {
-      if (err) err.code.should.equal(11000);
+    User.create(user, function(err) {
+      if (err) err.code.should.equal(12);
       done();
     });
   });
 
   it('should find user by email', function(done) {
-    User.findOne({ email: 'test@gmail.com' }, function(err, user) {
+    User.getByUsername('test@gmail.com', function(err, user) {
       if (err) return done(err);
       user.email.should.equal('test@gmail.com');
       done();
@@ -34,9 +34,14 @@ describe('User Model', function() {
   });
 
   it('should delete a user', function(done) {
-    User.remove({ email: 'test@gmail.com' }, function(err) {
+    User.getByUsername('test@gmail.com', function(err, user) {
       if (err) return done(err);
-      done();
+      var uid = user.uid;
+      User.remove(uid, function(err, result) {
+         if (err) return done(err);
+         done();
+      });
     });
+        
   });
 });

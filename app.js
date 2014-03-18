@@ -3,14 +3,13 @@
  */
 
 var express = require('express');
+var MemcachedStore = require('connect-memcached')(express);
 var flash = require('express-flash');
 var couchbase = require('couchbase');
 var path = require('path');
 var passport = require('passport');
 var expressValidator = require('express-validator');
 var connectAssets = require('connect-assets');
-
-var MemoryStore = express.session.MemoryStore;
 
 /**
  * Load controllers.
@@ -64,11 +63,11 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(expressValidator());
 app.use(express.methodOverride());
-
 app.use(express.session({
-  store: new MemoryStore(),
-  secret: 'secret',
-  key: 'bla'
+   secret: secrets.sessionSecret,
+   store: new MemcachedStore({
+      hosts: [ '127.0.0.1:11212' ]
+   })
 }));
 
 app.use(express.csrf());
